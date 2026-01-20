@@ -10,7 +10,7 @@ before launching the process need forcing File Explorer to run in a separate pro
 *this why this way forces it to use a legacy rendering model that responds better to DWM commands*
 
 
-## HOW TO USE IT
+# HOW TO USE
 
 1. download *SquareCorners.exe* file and put it in a folder of your choice
 
@@ -41,14 +41,14 @@ if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process 
 ℹ️ *any Window already open may need to be restarted*
 
 
-## HOW TO TWEAK IT
+# HOW TO TWEAK
 
 this line is for increase the frequency SC scan windows for disable rounded corners
 
 `Thread.Sleep(2000);` (milliseconds)
 
 
-## HOW TO COMPILE (if you want to compile the .exe yourself)
+# HOW TO COMPILE (if you want to compile the .exe yourself)
 
 OBV is a personal service, so the antivirus show many reports  
 also the code is simple and easy you can see the source
