@@ -38,7 +38,7 @@ and to remove...
 if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process -Name "dwm" -Force`  
 (but is not needed since SC uses SetWindowPos which updates windows in real time without crashing the desktop manager)
 
-ℹ️ *any Window already open may need to be restarted*
+ℹ️ *any window-app already opened before SC start may need to be restarted*
 
 
 # HOW TO TWEAK
@@ -50,22 +50,18 @@ this line is for increase the frequency SC scan windows for disable rounded corn
 
 # HOW TO COMPILE (if you want to compile the .exe yourself)
 
-OBV is a personal service, so the antivirus show many reports  
-also the code is simple and easy you can see the source
-if you dont thrst SC just dont use it ! :|
-
-HASH:
-112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
-
-VT report:
-https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
+> OBV is a personal service, so the antivirus show many reports  
+> also the code is simple and easy you can see the source
+> if you dont trust SC just dont use it ! :|
+> HASH: 112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
+> VT report: [https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5](https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5)
 
 the .cs file is the source code, you can compile it yourself using PS (for stay sure and safe)
 
 1. download *SquareCorners.cs*
 
 2. `Test-Path "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"`  
-if the result is **True** you are ready to compile, otherwise you need use a C# Compiler (Roslyn) included in modern .NET SDK
+if the result is **True** you are ready to compile, otherwise you need use a C# Compiler (Roslyn) included in .NET SDK
 
 3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /out:"<PATH_OF_THE_EXE>\SquareCorners.exe" "<PATH_OF_THE_SOURCE>\SquareCorners.cs"`  
 this comand using the integrated Windows compiler if present
