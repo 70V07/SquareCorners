@@ -18,17 +18,17 @@ before launching the process need forcing File Explorer to run in a separate pro
 
 3. following how to add SC on Windows startup...
 
-adds using Tasks  
+adds using Tasks:  
 `Register-ScheduledTask -TaskName "SquareCornersBackground" -Action (New-ScheduledTaskAction -Execute "<PATH_OF_THE_EXE>") -Trigger (New-ScheduledTaskTrigger -AtLogOn) -Principal (New-ScheduledTaskPrincipal -GroupId "Builtin\Administrators" -RunLevel Highest) -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit 0) -Force`
 and to remove if need...  
 `Unregister-ScheduledTask -TaskName "SquareCornersBackground" -Confirm:$false`
 
-adds using Registry (current user only)  
+adds using Registry (current user only):  
 `Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -Value "<PATH_OF_THE_EXE>"`
 and to remove...  
 `Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -ErrorAction SilentlyContinue`
 
-adds using Registry (all users)  
+adds using Registry (all users):  
 `Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -Value "<PATH_OF_THE_EXE>"`
 and to remove...  
 `Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -ErrorAction SilentlyContinue`
