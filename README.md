@@ -50,7 +50,17 @@ this line is for increase the frequency SC scan windows for disable rounded corn
 
 ## HOW TO COMPILE (if you want to compile the .exe yourself)
 
-the .cs file is the source code, you can compile it yourself using PS
+OBV is a personal service, so the antivirus show many reports  
+also the code is simple and easy you can see the source
+if you dont thrust SC just dont use it ! :|
+
+HASH:
+112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
+
+VT report:
+https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
+
+the .cs file is the source code, you can compile it yourself using PS (for stay sure and safe)
 
 1. download *SquareCorners.cs*
 
