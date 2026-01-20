@@ -9,22 +9,44 @@ before launching the process need forcing File Explorer to run in a separate pro
 ⚠️ without this tweak the SquareCorners not work on File Explorer  
 *this why this way forces it to use a legacy rendering model that responds better to DWM commands*
 
+
 ## HOW TO USE IT
 
 1. download *SquareCorners.exe* file and put it in a folder of your choice
 
 2. execute the process (now the process is in background, so you can kill it using Task Manager, if need)
 
+3. following how to add SC on Windows startup...
+
+adds using Tasks
+`Register-ScheduledTask -TaskName "SquareCornersBackground" -Action (New-ScheduledTaskAction -Execute "<PATH_OF_THE_EXE>") -Trigger (New-ScheduledTaskTrigger -AtLogOn) -Principal (New-ScheduledTaskPrincipal -GroupId "Builtin\Administrators" -RunLevel Highest) -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -ExecutionTimeLimit 0) -Force`
+and to remove if need...
+`Unregister-ScheduledTask -TaskName "SquareCornersBackground" -Confirm:$false`
+
+adds using Registry (current user only)
+`Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -Value "<PATH_OF_THE_EXE>"`
+and to remove...
+`Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -ErrorAction SilentlyContinue`
+
+adds using Registry (all users)
+`Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -Value "<PATH_OF_THE_EXE>"`
+and to remove...
+`Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -ErrorAction SilentlyContinue`
+
+- - -
+
 if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process -Name "dwm" -Force`  
 (but is not needed since SC uses SetWindowPos which updates windows in real time without crashing the desktop manager)
 
 ℹ️ *any Window already open may need to be restarted*
+
 
 ## HOW TO TWEAK IT
 
 this line is for increase the frequency SC scan windows for disable rounded corners
 
 `Thread.Sleep(2000);` (milliseconds)
+
 
 ## HOW TO COMPILE (if you want to compile the .exe yourself)
 
