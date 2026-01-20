@@ -1,4 +1,4 @@
-is a simple active .exe process running in background to disable the rounded corners
+is a simple active .exe process running in background to disable the rounded corners in Windows 11
 
 tested on **Windows 11 Pro 25H2 build 26200.7623**
 
