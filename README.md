@@ -52,7 +52,7 @@ this line is for increase the frequency SC scan windows for disable rounded corn
 
 OBV is a personal service, so the antivirus show many reports  
 also the code is simple and easy you can see the source
-if you dont thrust SC just dont use it ! :|
+if you dont thrst SC just dont use it ! :|
 
 HASH:
 112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
