@@ -52,9 +52,9 @@ this line is for increase the frequency SC scan windows for disable rounded corn
 
 # HOW TO COMPILE (if you want to compile the .exe yourself)
 
-> OBV is a personal service, so the antivirus show many reports  
-> also the code is simple and easy you can see the source
-> if you dont trust SC just dont use it ! :|
+> I made SC myself so I dont care much about security...  
+> the code is simple and easy you can review the source
+> and if you dont trust the .exe just dont use it ! :|
 > HASH: 112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5
 > VT report: [https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5](https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5)
 
