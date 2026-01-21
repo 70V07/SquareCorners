@@ -12,7 +12,7 @@ before launching the process need forcing File Explorer to run in a separate pro
 
 # HOW TO USE
 
-ℹ️ if you want the process to run on admin-windows you must run it with administrator privileges
+ℹ️ if you want the process to work on admin-windows you must run it with administrator privileges
 
 1. download *SquareCorners.exe* file and put it in a folder of your choice
 
