@@ -35,8 +35,6 @@ adds using Registry (all users):
 and to remove...  
 `Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -ErrorAction SilentlyContinue`
 
-- - -
-
 if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process -Name "dwm" -Force`  
 (but is not needed since SC uses SetWindowPos which updates windows in real time without crashing the desktop manager)
 
