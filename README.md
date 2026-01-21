@@ -6,7 +6,8 @@ before launching the process need forcing File Explorer to run in a separate pro
 
 `Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "SeparateProcess" -Value 1 -Type DWORD`  
 
-⚠️ *without this tweak the SquareCorners not work on File Explorer... this why this way forces it to use a legacy rendering model that responds better to DWM commands*
+⚠️ *without this tweak the SquareCorners not work on File Explorer...  
+this why this way forces it to use a legacy rendering model that responds better to DWM commands*
 
 
 # HOW TO USE
