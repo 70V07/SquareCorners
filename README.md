@@ -53,8 +53,10 @@ this line is for increase the frequency SC scan windows for disable rounded corn
 > I made SC myself so I dont care much about security...  
 > the code is simple and easy you can review the source  
 > and if you dont trust the .exe just dont use it ! :|  
-> HASH: 112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5  
-> VT report: [https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5](https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5)
+> HASH:  
+> 112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5  
+> VT report:  
+> [https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5](https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5)
 
 the .cs file is the source code, you can compile it yourself using PS (for stay sure and safe)
 
