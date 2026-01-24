@@ -47,7 +47,13 @@ this line is for increase the frequency SC scan windows for disable rounded corn
 
 `Thread.Sleep(2000);` (milliseconds)
 
-
+this section is for exclude processes you still want rounded corners
+```
+catch {
+		   // Ignore processes with restricted access (e.g. protected Antivirus or TrustedInstaller)
+			 // Example: Console.WriteLine("Access denied for process: " + p.ProcessName);
+}
+```
 # HOW TO COMPILE (if you want to compile the .exe yourself)
 
 > I made SC myself so I dont care much about security...  
