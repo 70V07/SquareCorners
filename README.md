@@ -80,10 +80,10 @@ static void EventCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int
 			SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, 0x0027);
 		}
 		catch {
-			// HERE YOU CAN ADD IGNORE RESTRICTED PROCESSES, FOLLOW EXAPLES
-      // if (pName == "notepad") return;
-      // AND IF NEED MORE THAN ONE
-      // if (pName == "notepad" || pName == "explorer" || pName == "lockapp" || pName == "shellexperiencehost") return;
+			// ⚙️ HERE YOU CAN ADD SETUP IGNORED RESTRICTED PROCESSES, FOLLOW EXAPLES
+      		// if (pName == "notepad") return;
+      		// AND IF NEED IGNORE MORE THAN ONE PROCESS...
+      		// if (pName == "notepad" || pName == "explorer" || pName == "lockapp" || pName == "shellexperiencehost") return;
 		}
 	}
 }
