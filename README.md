@@ -104,3 +104,7 @@ if the result is **True** you are ready to compile, otherwise you need use a C# 
 
 3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /reference:System.Windows.Forms.dll /out:"<PATH_OF_YOUR_CHOICE>\SquareCorners.exe" "<PATH_OF_CS_FILES>\SquareCorners.cs" "<PATH_OF_CS_FILES>\AssemblyInfo.cs"`  
 this comand using the integrated Windows compiler if present
+
+# LAST WORDS (LOL)
+
+*the 1.0 version is deleted why not really stable, also use CPU resources (even very very less) every 2-3sec, so...*
