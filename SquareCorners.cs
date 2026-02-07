@@ -1,45 +1,57 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Threading;
 
 class SquareCorners {
-    [DllImport("dwmapi.dll")]
-    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int pvAttribute, int cbAttribute);
+	// Importazione per intercettare eventi di sistema
+	[DllImport("user32.dll")]
+	private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
 
-    [DllImport("user32.dll")]
-    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+	private delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 
-    const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
-    const int DWMWCP_DONOTROUND = 1;
-    
-    // Flag per SetWindowPos: NoMove (2) | NoSize (1) | NoZOrder (4) | FrameChanged (32) = 39 (0x0027)
-    const uint SWP_FLAGS = 0x0027;
+	// Costanti per eventi: Creazione finestra (0x8000) e primo piano (0x0003)
+	const uint EVENT_OBJECT_CREATE = 0x8000;
+	const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+	const uint WINEVENT_OUTOFCONTEXT = 0;
 
-    static void Main() {
-        while (true) {
-			foreach (Process p in Process.GetProcesses()) {
-				// Skip System and Idle processes immediately to avoid unnecessary access attempts
-				if (p.Id <= 4) continue; 
+	// Metodi DWM esistenti nel tuo codice
+	[DllImport("dwmapi.dll")]
+	private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int pvAttribute, int cbAttribute);
+	
+	[DllImport("user32.dll")]
+	private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
-				try {
-					IntPtr handle = p.MainWindowHandle;
-					if (handle != IntPtr.Zero) {
-						int attribute = DWMWCP_DONOTROUND;
-						
-						// Apply the DWM attribute for square corners
-						DwmSetWindowAttribute(handle, DWMWA_WINDOW_CORNER_PREFERENCE, ref attribute, sizeof(int));
-						
-						// Force window frame graphics refresh
-						SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0, SWP_FLAGS);
-					}
-				}
-				catch {
-					// Ignore processes with restricted access (e.g. protected Antivirus or TrustedInstaller)
-					// Example: Console.WriteLine("Access denied for process: " + p.ProcessName);
-				}
-			}
-            Thread.Sleep(2000); // set the frequency for scanning windows
-        }
-    }
+	const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
+	const int DWMWCP_DONOTROUND = 1;
+	const uint SWP_FLAGS = 0x0027;
+
+	// Riferimento statico per impedire al Garbage Collector di eliminare il delegato
+	private static WinEventDelegate _delegate;
+
+	static void Main() {
+		_delegate = new WinEventDelegate(EventCallback);
+		
+		// Registra l'hook per la creazione di nuovi oggetti (finestre)
+		SetWinEventHook(EVENT_OBJECT_CREATE, EVENT_OBJECT_CREATE, IntPtr.Zero, _delegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+		// Registra l'hook per il cambio finestra attiva (copre finestre già aperte)
+		SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, _delegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+
+		// Necessario per mantenere il programma in ascolto degli eventi senza loop CPU
+		System.Windows.Forms.Application.Run(); 
+	}
+
+	static void EventCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime) {
+	if (idObject == 0 && hwnd != IntPtr.Zero) {
+		// 1. Forza angoli retti
+		int cornerAttribute = DWMWCP_DONOTROUND;
+		DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ref cornerAttribute, sizeof(int));
+
+		// 2. Tweak per il colore del bordo (Rimuove o scurisce il bordo bianco)
+		// Impostando 0xFFFFFFFE (o un colore scuro) spesso risolve il glitch visivo
+		int borderColor = 0x010101; // Nero quasi puro per nascondere il bordo
+		DwmSetWindowAttribute(hwnd, 34, ref borderColor, sizeof(int)); // 34 = DWMWA_BORDER_COLOR
+
+		SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, SWP_FLAGS);
+	}
+}
 }
