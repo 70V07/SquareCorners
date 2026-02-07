@@ -14,7 +14,7 @@ this why this way forces it to use a legacy rendering model that responds better
 
 ℹ️ *if you want the process to work on admin-windows you must run it with administrator privileges*
 
-1. download *SquareCorners.exe* file and put it in a folder of your choice
+1. download Latest Relase and put the .exe in a folder of your choice
 
 2. execute the process (now the process is in background, so you can kill it using Task Manager, if need)
 
@@ -43,30 +43,64 @@ if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process 
 
 # HOW TO TWEAK
 
-this line is for increase the frequency SC scan windows for disable rounded corners
+### 🧐 How to exclude specific processes (Tutorial 👉 need to recompile OBV):
 
-`Thread.Sleep(2000);` (milliseconds)
+1. Add this requirement to `DllImports` section
+```
+[DllImport("user32.dll")]
+private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+```
+2. Define the exclusion list inside the `SquareCorners` class
+```
+private static readonly HashSet<string> Exclusions = new HashSet<string> {
+	"vlc",
+	"steam",
+	"example_game"
+};
+```
+3. Update the `EventCallback` method with the filtering logic
+```
+static void EventCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime) {
+	if (idObject == 0 && hwnd != IntPtr.Zero) {
+		try {
+			// Retrieve the process ID and name from the window handle
+			GetWindowThreadProcessId(hwnd, out uint processId);
+			string pName = Process.GetProcessById((int)processId).ProcessName.ToLower();
 
-this section is for exclude processes you still want rounded corners
+			// Skip execution if the process name is in the exclusion list
+			if (Exclusions.Contains(pName)) return;
 
-`catch { // Example: Console.WriteLine("Access denied for process: " + p.ProcessName); }`
+			// Apply square corners and border fix
+			int cornerAttr = 1; // DWMWCP_DONOTROUND
+			DwmSetWindowAttribute(hwnd, 33, ref cornerAttr, sizeof(int));
+			
+			int borderColor = 0x010101;
+			DwmSetWindowAttribute(hwnd, 34, ref borderColor, sizeof(int));
+			
+			SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, 0x0027);
+		}
+		catch {
+			// HERE YOU CAN ADD IGNORE RESTRICTED PROCESSES, FOLLOW EXAPLES
+      // if (pName == "notepad") return;
+      // AND IF NEED MORE THAN ONE
+      // if (pName == "notepad" || pName == "explorer" || pName == "lockapp" || pName == "shellexperiencehost") return;
+		}
+	}
+}
+```
 
 # HOW TO COMPILE (if you want to compile the .exe yourself)
 
 > I made SC myself so I dont care much about security...  
 > the code is simple and easy you can review the source  
 > and if you dont trust the .exe just dont use it ! :|  
-> HASH:  
-> 112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5  
-> VT report:  
-> [https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5](https://www.virustotal.com/gui/file/112e25fa928dc7e101c1c30de9b2f4fe323f9675fb453d1637995a2add4affd5)
 
 the .cs file is the source code, you can compile it yourself using PS (for stay sure and safe)
 
-1. download *SquareCorners.cs*
+1. download both .cs files from source
 
 2. `Test-Path "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"`  
 if the result is **True** you are ready to compile, otherwise you need use a C# Compiler (Roslyn) included in .NET SDK
 
-3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /out:"<PATH_OF_THE_EXE>\SquareCorners.exe" "<PATH_OF_THE_SOURCE>\SquareCorners.cs"`  
+3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /reference:System.Windows.Forms.dll /out:"<PATH_OF_YOUR_CHOICE>\SquareCorners.exe" "<PATH_OF_CS_FILES>\SquareCorners.cs" "<PATH_OF_CS_FILES>\AssemblyInfo.cs"`  
 this comand using the integrated Windows compiler if present
