@@ -1,4 +1,6 @@
-# TEMPORARY NOT WORK, HOTFIX RELASED SOON, SORRY FOR INCONVENIENCE T_T
+# ⚠️ TEMPORARY NOT WORK, HOTFIX RELASED SOON, SORRY FOR INCONVENIENCE T_T
+
+![WaitingNotReadyGIF](https://github.com/user-attachments/assets/d418b3cd-03d4-424b-bce9-d808101914a6)
 
 is a simple active .exe process running in background to disable the rounded corners in Windows 11
 
