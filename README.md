@@ -1,10 +1,8 @@
-👉 maybe not work on all windows... in Windows -_-
-
 is a simple active .exe process running in background to disable the rounded corners in Windows 11
 
 tested on **Windows 11 Pro 25H2 build 26200.7623**
 
-before launching the process need forcing File Explorer to run in a separate process:  
+before launching the process need forcing File Explorer to run in a separate process:
 
 `Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "SeparateProcess" -Value 1 -Type DWORD`  
 
@@ -38,74 +36,44 @@ and to remove...
 `Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" -Name "SquareCorners" -ErrorAction SilentlyContinue`
 
 if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process -Name "dwm" -Force`  
-(but is not needed since SC uses SetWindowPos which updates windows in real time without crashing the desktop manager)
 
 ℹ️ *any window-app already opened before SC start may need to be restarted*
 
 
-Ecco le sezioni aggiornate per il tuo **README.md**, ottimizzate per la nuova architettura basata su eventi (WinEvents).
+# HOW TO EXCLUDE SPECIFIC PROCESSES
 
-----------
+some legacy applications or specific windows (like "Properties" dialogs) may show visual artifacts (exa: white borders) when forced to have square corners  
+since v2.1 the tweak includes a native exclusion system. there is no external config file, so you must edit the source code and recompile to add new exclusions
 
-## 🧐 HOW TO TWEAK (tutorials 👉 need to recompile OBV)
+1.  open SquareCorners.cs with a text editor (Notepad is fine)
+    
+2.  locate the `static void ApplyStyle(IntPtr handle) function`
+    
+3.  Scroll down to the // DISABLE PROCESSES section
+    
+4.  add a line for the process you want to exclude using its **Process Name** (without .exe)
 
-### How to change color of inactive window border
+**Example:** If you want to exclude Notepad:
 
-ℹ️ the active window border automatically uses the system accent color.
-
-to change the border color of inactive windows, locate the `colorToApply` logic inside the `ApplyStyle` method
-
-‼️ the value must be written in **BGR** (Blue, Green, Red) hexadecimal format: `0x00BBGGRR`
-
-**Very Dark Gray**
-`0x00202020`
-
-**Medium Gray**
-`0x00606060`
-
-**Deep Charcoal**
-`0x001A1A1A`
-
-**Black**
-`0x00000000`
-
-### How to exclude specific processes
-
-1.  add this requirement to the `DllImports` section:
-```
-[DllImport("user32.dll")]
-private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-```
-2.  define the exclusion list inside the `SquareCorners` class:
-```
-private static readonly System.Collections.Generic.HashSet<string> Exclusions = new System.Collections.Generic.HashSet<string> {
-	"vlc",
-	"steam",
-	"example_game"
-};
+codeC#
 
 ```
-3.  update the `WinEventProc` method with the filtering logic:   
-```
-static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime) {
-	if (idObject == 0 && hwnd != IntPtr.Zero) {
-		try {
-			GetWindowThreadProcessId(hwnd, out uint processId);
-			string pName = System.Diagnostics.Process.GetProcessById((int)processId).ProcessName.ToLower();
+// inside ApplyStyle function...
 
-			if (Exclusions.Contains(pName)) return;
+// DISABLE PROCESSES
+string procName = GetProcessName(handle);
 
-			ApplyStyle(hwnd);
-		}
-		catch {
-			// ⚙️ HERE YOU CAN ADD SETUP IGNORED RESTRICTED PROCESSES, FOLLOW EXAPLES
-      		// if (pName == "notepad") return;
-      		// AND IF NEED IGNORE MORE THAN ONE PROCESS...
-      		// if (pName == "notepad" || pName == "explorer" || pName == "lockapp" || pName == "shellexperiencehost") return;
-		}
-	}
-}
+// Existing exclusion
+if (procName.Equals("GoogleDriveFS", StringComparison.OrdinalIgnoreCase)) return;
+
+// YOUR NEW EXCLUSION:
+if (procName.Equals("notepad", StringComparison.OrdinalIgnoreCase)) return;
 ```
+
+5.  Save the file and Recompile the .exe (see instructions below)
+
+> 💡 **Tip:** You can find the exact Process Name in **Task Manager > Details tab**
+
 
 # HOW TO COMPILE (if you want to compile the .exe yourself)
 
@@ -127,7 +95,7 @@ this comand using the integrated Windows compiler if present
 
 the 1.0 version is deleted why not really stable, also use CPU resources (even very very less) every seconds, so...
 
-**anyway this is the old code (just for reference):**
+**anyway this is the old 1.0 code (just for reference):**
 ```
 using System;
 using System.Runtime.InteropServices;
