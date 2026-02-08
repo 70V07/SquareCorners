@@ -42,7 +42,8 @@ class SquareCorners {
 	const int DWMWCP_DONOTROUND = 1;
 	
 	// SETWINDOWPOS FLAGS
-	const uint SWP_FLAGS = 0x0037; 
+	// MODIFICATO: Rimosso 0x0020 (SWP_FRAMECHANGED) per evitare bug grafici nei Common Item Dialogs
+	const uint SWP_FLAGS = 0x0017; 
 	
 	const uint WINEVENT_OUTOFCONTEXT = 0;
 	const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
@@ -84,8 +85,9 @@ class SquareCorners {
 		// RETRIEVE THE PROCESS NAME ONLY IF NECESSARY
 		string procName = GetProcessName(handle);
 		
-		// 👉 HERE ADD PROCESSES TO EXCLUDE
-		if (procName.Equals("GoogleDriveFS", StringComparison.OrdinalIgnoreCase)) return;
+		// EXCLUSION FOR GOOGLE DRIVE DESKTOP (PREVENTS WHITE BORDER GLITCH)
+		// AGGIUNTO: explorer per prevenire bug di rendering nei dialoghi shell gestiti dal processo explorer.exe
+		if (procName.Equals("GoogleDriveFS", StringComparison.OrdinalIgnoreCase) || procName.Equals("explorer", StringComparison.OrdinalIgnoreCase)) return;
 
 
 		// --- APPLY STYLE ---
