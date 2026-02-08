@@ -9,6 +9,7 @@ before launching the process need forcing File Explorer to run in a separate pro
 ⚠️ *without this tweak the SquareCorners not work on File Explorer...  
 this why this way forces it to use a legacy rendering model that responds better to DWM commands*
 
+---
 
 # HOW TO USE
 
@@ -39,6 +40,7 @@ if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process 
 
 ℹ️ *any window-app already opened before SC start may need to be restarted*
 
+---
 
 # HOW TO EXCLUDE SPECIFIC PROCESSES
 
@@ -74,6 +76,7 @@ if (procName.Equals("notepad", StringComparison.OrdinalIgnoreCase)) return;
 
 > 💡 **Tip:** You can find the exact Process Name in **Task Manager > Details tab**
 
+---
 
 # HOW TO COMPILE (if you want to compile the .exe yourself)
 
@@ -90,6 +93,8 @@ if the result is **True** you are ready to compile, otherwise you need use a C# 
 
 3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /reference:System.Windows.Forms.dll /out:"<PATH_OF_YOUR_CHOICE>\SquareCorners.exe" "<PATH_OF_CS_FILES>\SquareCorners.cs" "<PATH_OF_CS_FILES>\AssemblyInfo.cs"`  
 this comand using the integrated Windows compiler if present
+
+---
 
 # LAST WORDS (LOL)
 
