@@ -91,7 +91,7 @@ the .cs file is the source code, you can compile it yourself using PS (for stay 
 2. `Test-Path "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe"`  
 if the result is **True** you are ready to compile, otherwise you need use a C# Compiler (Roslyn) included in .NET SDK
 
-3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /reference:System.Windows.Forms.dll /out:"<PATH_OF_YOUR_CHOICE>\SquareCorners.exe" "<PATH_OF_CS_FILES>\SquareCorners.cs" "<PATH_OF_CS_FILES>\AssemblyInfo.cs"`  
+3. `& "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:winexe /reference:System.Windows.Forms.dll /out:"<OUTPUT_PATH>\SquareCorners.exe" "<SOURCE_PATH>\SquareCorners.cs" "<SOURCE_PATH>\SquareCorners\AssemblyInfo.cs"`  
 this comand using the integrated Windows compiler if present
 
 ---
