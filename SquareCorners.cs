@@ -84,7 +84,7 @@ class SquareCorners {
 		// RETRIEVE THE PROCESS NAME ONLY IF NECESSARY
 		string procName = GetProcessName(handle);
 		
-		// EXCLUSION FOR GOOGLE DRIVE DESKTOP (PREVENTS WHITE BORDER GLITCH)
+		// 👉 HERE ADD PROCESSES TO EXCLUDE
 		if (procName.Equals("GoogleDriveFS", StringComparison.OrdinalIgnoreCase)) return;
 
 
