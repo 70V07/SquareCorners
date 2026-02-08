@@ -28,7 +28,6 @@ class SquareCorners {
 	[DllImport("user32.dll")]
 	private static extern IntPtr DispatchMessage([In] ref MSG lpMsg);
 
-	// NEW IMPORTS TO IDENTIFY CLASSES AND PROCESSES
 	[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 	static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
 
@@ -37,12 +36,10 @@ class SquareCorners {
 
 	delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 
-	// DWM CONSTANTS
 	const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
 	const int DWMWCP_DONOTROUND = 1;
 	
-	// SETWINDOWPOS FLAGS
-	// MODIFICATO: Rimosso 0x0020 (SWP_FRAMECHANGED) per evitare bug grafici nei Common Item Dialogs
+	// FIX: We keep 0x0017 (without FRAMECHANGED) which useful for glitches
 	const uint SWP_FLAGS = 0x0017; 
 	
 	const uint WINEVENT_OUTOFCONTEXT = 0;
@@ -55,7 +52,6 @@ class SquareCorners {
 	static IntPtr hookHandle = IntPtr.Zero;
 	static WinEventDelegate dele = null;
 
-	// HELPER METHOD TO SAFELY RETRIEVE THE PROCESS NAME
 	static string GetProcessName(IntPtr hWnd) {
 		try {
 			uint pid;
@@ -70,30 +66,34 @@ class SquareCorners {
 	static void ApplyStyle(IntPtr handle) {
 		if (handle == IntPtr.Zero || !IsWindowVisible(handle)) return;
 
-		// RETRIEVE THE WINDOW CLASS NAME
 		StringBuilder classBuff = new StringBuilder(256);
 		GetClassName(handle, classBuff, 256);
 		string className = classBuff.ToString();
 
-		// --- DISABLE WINDOWS DIALOGS ---
-		// #32770 IS THE STANDARD CLASS FOR WINDOWS DIALOGS (PROPERTIES, RUN, FILE COPY, ETC.)
-		// THESE WINDOWS OFTEN DRAW CUSTOM BORDERS THAT GLITCH IF FORCED.
-		if (className == "#32770") return;
+		// --- ESCLUSION CLASSES (SYSTEM & DIALOGS) ---
+		// #32770           = Dialoghi standard (Proprietà, Salva con nome, etc.)
+		// Shell_TrayWnd    = Barra delle Applicazioni (Taskbar)
+		// Progman / WorkerW = Desktop
+		// Windows.UI.Core.CoreWindow = Elementi Shell/Start Menu/Notification Center
+		if (className == "#32770" || 
+			className == "Shell_TrayWnd" || 
+			className == "Progman" || 
+			className == "WorkerW" ||
+			className == "Windows.UI.Core.CoreWindow") 
+		{
+			return;
+		}
 
-
-		// --- DISABLE PROCESSES ---
-		// RETRIEVE THE PROCESS NAME ONLY IF NECESSARY
+		// --- ESCLUSION PROCESSES ---
 		string procName = GetProcessName(handle);
 		
-		// EXCLUSION FOR GOOGLE DRIVE DESKTOP (PREVENTS WHITE BORDER GLITCH)
-		// AGGIUNTO: explorer per prevenire bug di rendering nei dialoghi shell gestiti dal processo explorer.exe
-		if (procName.Equals("GoogleDriveFS", StringComparison.OrdinalIgnoreCase) || procName.Equals("explorer", StringComparison.OrdinalIgnoreCase)) return;
+		// NOTE: removed "explorer". classes above (Shell_TrayWnd, Progman) already protect the desktop and taskbar
+		if (procName.Equals("GoogleDriveFS", StringComparison.OrdinalIgnoreCase)) return;
 
 
 		// --- APPLY STYLE ---
 		int cornerAttr = DWMWCP_DONOTROUND;
 		DwmSetWindowAttribute(handle, DWMWA_WINDOW_CORNER_PREFERENCE, ref cornerAttr, sizeof(int));
-		
 		SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0, SWP_FLAGS);
 	}
 
