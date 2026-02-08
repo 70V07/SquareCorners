@@ -14,10 +14,9 @@ this why this way forces it to use a legacy rendering model that responds better
 # 🪲 KNOWN ISSUES
 
 Im looking for solutions that will be implemented in the next release  
-*if you have ideas open an issue...*
+if you have ideas open an issue...
 
-+ the load/save dialog windows show bugged files/folders section  
-the section appears to be incorrectly positioned
++ *nothing to see here right now...*
 
 ---
 
