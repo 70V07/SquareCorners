@@ -11,7 +11,17 @@ this why this way forces it to use a legacy rendering model that responds better
 
 ---
 
-# HOW TO USE
+# 🪲 KNOWN ISSUES
+
+Im looking for solutions that will be implemented in the next release  
+*if you have ideas open an issue...*
+
++ the load/save dialog windows show bugged files/folders section  
+the section appears to be incorrectly positioned
+
+---
+
+# ⚙️ HOW TO USE
 
 ℹ️ *if you want the process to work on admin-windows you must run it with administrator privileges*
 
@@ -42,7 +52,7 @@ if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process 
 
 ---
 
-# HOW TO EXCLUDE SPECIFIC PROCESSES
+# ⚙️ HOW TO EXCLUDE SPECIFIC PROCESSES
 
 some legacy applications or specific windows (like "Properties" dialogs) may show visual artifacts (exa: white borders) when forced to have square corners  
 since v2.1 the tweak includes a native exclusion system. there is no external config file, so you must edit the source code and recompile to add new exclusions
@@ -78,7 +88,7 @@ if (procName.Equals("notepad", StringComparison.OrdinalIgnoreCase)) return;
 
 ---
 
-# HOW TO COMPILE (if you want to compile the .exe yourself)
+# ⚙️ HOW TO COMPILE (if you want to compile the .exe yourself)
 
 > I made SC myself so I dont care much about security...  
 > the code is simple and easy you can review the source  
@@ -96,7 +106,7 @@ this comand using the integrated Windows compiler if present
 
 ---
 
-# LAST WORDS (LOL)
+# 🧐 LAST WORDS (LOL)
 
 the 1.0 version is deleted why not really stable, also use CPU resources (even very very less) every seconds, so...
 
