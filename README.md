@@ -1,5 +1,3 @@
-# ⚠️ TEMPORARY MAYBE NOT WORK AS EXPECTED, HOTFIX RELASED SOON, SORRY FOR INCONVENIENCE T_T
-
 is a simple active .exe process running in background to disable the rounded corners in Windows 11
 
 tested on **Windows 11 Pro 25H2 build 26200.7623**
@@ -43,43 +41,59 @@ if not work can try reload DWM (Desktop Window Manager) using PS: `Stop-Process 
 ℹ️ *any window-app already opened before SC start may need to be restarted*
 
 
-# HOW TO TWEAK
+Ecco le sezioni aggiornate per il tuo **README.md**, ottimizzate per la nuova architettura basata su eventi (WinEvents).
 
-### 🧐 How to exclude specific processes (Tutorial 👉 need to recompile OBV):
+----------
 
-1. Add this requirement to `DllImports` section
+## 🧐 HOW TO TWEAK (tutorials 👉 need to recompile OBV)
+
+### How to change color of inactive window border
+
+ℹ️ the active window border automatically uses the system accent color.
+
+to change the border color of inactive windows, locate the `colorToApply` logic inside the `ApplyStyle` method
+
+‼️ the value must be written in **BGR** (Blue, Green, Red) hexadecimal format: `0x00BBGGRR`
+
+**Very Dark Gray**
+`0x00202020`
+
+**Medium Gray**
+`0x00606060`
+
+**Deep Charcoal**
+`0x001A1A1A`
+
+**Black**
+`0x00000000`
+
+### How to exclude specific processes
+
+1.  add this requirement to the `DllImports` section:
 ```
 [DllImport("user32.dll")]
 private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 ```
-2. Define the exclusion list inside the `SquareCorners` class
+2.  define the exclusion list inside the `SquareCorners` class:
 ```
-private static readonly HashSet<string> Exclusions = new HashSet<string> {
+private static readonly System.Collections.Generic.HashSet<string> Exclusions = new System.Collections.Generic.HashSet<string> {
 	"vlc",
 	"steam",
 	"example_game"
 };
+
 ```
-3. Update the `EventCallback` method with the filtering logic
+3.  update the `WinEventProc` method with the filtering logic:   
 ```
-static void EventCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime) {
+static void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime) {
 	if (idObject == 0 && hwnd != IntPtr.Zero) {
 		try {
-			// Retrieve the process ID and name from the window handle
 			GetWindowThreadProcessId(hwnd, out uint processId);
-			string pName = Process.GetProcessById((int)processId).ProcessName.ToLower();
+			string pName = System.Diagnostics.Process.GetProcessById((int)processId).ProcessName.ToLower();
 
-			// Skip execution if the process name is in the exclusion list
 			if (Exclusions.Contains(pName)) return;
 
-			// Apply square corners and border fix
-			int cornerAttr = 1; // DWMWCP_DONOTROUND
-			DwmSetWindowAttribute(hwnd, 33, ref cornerAttr, sizeof(int));
-			
-			int borderColor = 0x010101;
-			DwmSetWindowAttribute(hwnd, 34, ref borderColor, sizeof(int));
-			
-			SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, 0x0027);
+			ApplyStyle(hwnd);
 		}
 		catch {
 			// ⚙️ HERE YOU CAN ADD SETUP IGNORED RESTRICTED PROCESSES, FOLLOW EXAPLES
